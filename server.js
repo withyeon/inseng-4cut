@@ -3,6 +3,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const path = require('path');
+// Load .env if available (optional)
+try {
+  require('dotenv').config();
+} catch (e) {
+  // dotenv not installed; env vars can be provided by the environment
+}
 
 const app = express();
 const DEFAULT_PORT = Number(process.env.PORT) || 3000;
@@ -23,6 +29,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+  console.warn(
+    '[WARN] GMAIL_USER/GMAIL_APP_PASSWORD가 설정되지 않았습니다. 이메일 전송이 실패할 수 있습니다. ' +
+    '로컬에서는 프로젝트 루트의 .env 파일에 GMAIL_USER, GMAIL_APP_PASSWORD를 설정하세요 (Google App Password 권장).'
+  );
+}
 app.post('/send-photo', async (req, res) => {
   try {
     const { email, image } = req.body || {};
