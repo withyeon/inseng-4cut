@@ -156,10 +156,20 @@ input[type="email"]::placeholder {
 }
 
 #status-message {
-  min-height: 24px;
-  font-size: 16px;
-  color: #c8ced8;
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  z-index: 3;
+  color: #f4f4f7;
+  background: rgba(0,0,0,0.45);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.2;
   text-align: center;
+  max-width: calc(100% - 24px);
+  pointer-events: none; /* 터치/클릭 방해하지 않도록 */
 }
 
 @media (orientation: landscape) and (max-height: 820px) {

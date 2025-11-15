@@ -16,6 +16,9 @@
   let capturedImages = []; // dataURL list
   let isCapturing = false;
   const NUM_SHOTS = 2;
+  const CAPTURE_TARGET_RATIO = 3 / 4; // width : height = 3 : 4 (세로)
+  const CAPTURE_OUT_WIDTH = 1080;
+  const CAPTURE_OUT_HEIGHT = Math.round(CAPTURE_OUT_WIDTH / CAPTURE_TARGET_RATIO); // 1440
   // 슬롯 좌표는 템플릿 이미지(overlay)의 가로/세로를 1로 보았을 때의 비율 값입니다.
   // 필요 시 아래 숫자만 조정하면 됩니다. (x, y, w, h: 0~1)
   const TEMPLATE_SLOTS = [
@@ -53,6 +56,9 @@
       overlayImg.src = TRANSPARENT_PX;
     });
 
+    // 촬영 중 가림 방지를 위해 초기에는 템플릿을 숨겨둡니다
+    if (overlayImg) overlayImg.style.visibility = "hidden";
+
     // 템플릿 이미지의 투명 여부를 로드 완료 시점에 점검
     if (overlayImg && overlayImg.complete && overlayImg.naturalWidth > 0) {
       if (DEBUG_CHECK_TRANSPARENCY) {
@@ -80,7 +86,12 @@
   async function startCamera() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
+        video: {
+          facingMode: "user",
+          width: { ideal: CAPTURE_OUT_WIDTH },
+          height: { ideal: CAPTURE_OUT_HEIGHT },
+          aspectRatio: { ideal: CAPTURE_TARGET_RATIO },
+        },
         audio: false,
       });
       video.srcObject = stream;
@@ -89,9 +100,7 @@
       setStatus("");
     } catch (err) {
       console.error("Camera error:", err);
-      setStatus(
-        "Unable to access the camera. Please allow camera permissions in your browser."
-      );
+      setStatus("카메라에 접근할 수 없습니다. 브라우저에서 카메라 권한을 허용해 주세요.");
       captureBtn.disabled = true;
     }
   }
@@ -115,8 +124,10 @@
     isCapturing = true;
     captureBtn.disabled = true;
     try {
+      // 촬영 중에는 템플릿을 숨김 유지
+      if (overlayImg) overlayImg.style.visibility = "hidden";
       await runCountdown(3);
-      const shot = await captureFrame();
+      const shot = await captureFramePortrait();
       capturedImages.push(shot);
 
       if (capturedImages.length < NUM_SHOTS) {
@@ -150,18 +161,18 @@
 
   async function onSendEmail() {
     if (!capturedImageData) {
-      setStatus("Please capture a photo first.");
+      setStatus("먼저 사진을 촬영해 주세요.");
       return;
     }
     const email = (emailInput.value || "").trim();
     if (!isValidEmail(email)) {
-      setStatus("Please enter a valid email address.");
+      setStatus("올바른 이메일 주소를 입력해 주세요.");
       emailInput.focus();
       return;
     }
 
     sendBtn.disabled = true;
-    setStatus("Sending...");
+    setStatus("전송 중...");
 
     try {
       const res = await fetch("/send-photo", {
@@ -175,10 +186,10 @@
         throw new Error(body.message || "Request failed");
       }
 
-      setStatus("Success! Your photo has been sent.");
+      setStatus("전송 완료! 이메일을 확인해 주세요.");
     } catch (err) {
       console.error(err);
-      setStatus("Error sending email. Please try again.");
+      setStatus("전송 중 오류가 발생했습니다. 다시 시도해 주세요.");
     } finally {
       sendBtn.disabled = false;
     }
@@ -227,6 +238,38 @@
     ctx.drawImage(video, 0, 0, width, height);
     ctx.restore();
 
+    return canvas.toDataURL("image/png");
+  }
+
+  // 세로(3:4) 비율로 중앙 크롭하여 캡처
+  async function captureFramePortrait() {
+    const vW = video.videoWidth || CAPTURE_OUT_WIDTH;
+    const vH = video.videoHeight || CAPTURE_OUT_HEIGHT;
+    const targetRatio = CAPTURE_TARGET_RATIO;
+    const sourceRatio = vW / vH;
+
+    let sx = 0, sy = 0, sw = vW, sh = vH;
+    if (sourceRatio > targetRatio) {
+      // 원본이 더 가로로 넓음 → 가로를 크롭
+      sw = Math.round(vH * targetRatio);
+      sx = Math.round((vW - sw) / 2);
+    } else if (sourceRatio < targetRatio) {
+      // 원본이 더 세로로 큼 → 세로를 크롭
+      sh = Math.round(vW / targetRatio);
+      sy = Math.round((vH - sh) / 2);
+    }
+
+    const outW = CAPTURE_OUT_WIDTH;
+    const outH = CAPTURE_OUT_HEIGHT;
+    canvas.width = outW;
+    canvas.height = outH;
+    const ctx = canvas.getContext("2d");
+    ctx.save();
+    // 미러링(셀피 자연스러운 연출)
+    ctx.translate(outW, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, outW, outH);
+    ctx.restore();
     return canvas.toDataURL("image/png");
   }
 

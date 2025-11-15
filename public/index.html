@@ -12,26 +12,26 @@
         <video id="video-feed" autoplay playsinline muted></video>
         <img id="template-overlay" src="./template.png" alt="Template Overlay" />
         <div id="countdown" aria-live="assertive"></div>
+        <div id="status-message" role="status" aria-live="polite"></div>
       </div>
 
       <canvas id="photo-canvas"></canvas>
 
       <div id="controls">
-        <button id="capture-btn">Capture</button>
+        <button id="capture-btn">촬영</button>
       </div>
 
       <div id="email-form">
         <img id="photo-preview" alt="Captured preview" />
         <div class="form-row">
-          <input id="email-input" type="email" placeholder="Enter your email" autocomplete="email" inputmode="email" />
+          <input id="email-input" type="email" placeholder="이메일 주소를 입력하세요" autocomplete="email" inputmode="email" />
         </div>
         <div class="form-row buttons">
-          <button id="send-btn">Send Email</button>
-          <button id="retry-btn" class="secondary">Try Again</button>
+          <button id="send-btn">이메일 보내기</button>
+          <button id="retry-btn" class="secondary">다시 찍기</button>
         </div>
       </div>
 
-      <div id="status-message" role="status" aria-live="polite"></div>
     </div>
 
     <script src="./script.js"></script>

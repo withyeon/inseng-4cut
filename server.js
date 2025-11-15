@@ -39,7 +39,7 @@ app.post('/send-photo', async (req, res) => {
   try {
     const { email, image } = req.body || {};
     if (!email || !image) {
-      return res.status(400).json({ message: 'Missing email or image.' });
+      return res.status(400).json({ message: '이메일 주소 또는 이미지가 없습니다.' });
     }
 
     // Expecting data:image/png;base64,....
@@ -49,8 +49,8 @@ app.post('/send-photo', async (req, res) => {
     const mailOptions = {
       from: fromAddress,
       to: email,
-      subject: 'Your Chopiti Photo!',
-      text: 'Here is your photo from the Chopiti Photo Booth!',
+      subject: '인생네컷 사진이 도착했어요!',
+      text: '촬영하신 인생네컷 사진을 첨부했습니다. 소중한 순간을 공유해 보세요!',
       attachments: [
         {
           filename: 'chopiti-photo.png',
@@ -61,10 +61,10 @@ app.post('/send-photo', async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
-    return res.status(200).json({ message: 'Email sent successfully!' });
+    return res.status(200).json({ message: '이메일이 성공적으로 전송되었습니다.' });
   } catch (err) {
     console.error('Error sending email:', err);
-    return res.status(500).json({ message: 'Error sending email.' });
+    return res.status(500).json({ message: '이메일 전송 중 오류가 발생했습니다.' });
   }
 });
 
