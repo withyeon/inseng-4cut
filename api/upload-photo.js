@@ -1,15 +1,7 @@
-import { put } from '@vercel/blob';
-import { v4 as uuidv4 } from 'uuid';
+const { put } = require('@vercel/blob');
+const { v4: uuidv4 } = require('uuid');
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '15mb',
-    },
-  },
-};
-
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
