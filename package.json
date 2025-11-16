@@ -2,6 +2,7 @@
   "name": "life4cuts-vercel",
   "version": "1.0.0",
   "description": "Life4Cuts Photo Booth (Vercel Serverless + Vercel Blob + Vanilla JS)",
+  "type": "module",
   "scripts": {},
   "dependencies": {
     "@vercel/blob": "^0.24.0",
