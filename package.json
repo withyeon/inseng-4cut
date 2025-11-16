@@ -1,16 +1,14 @@
 {
-  "name": "chopiti-life4cuts",
+  "name": "life4cuts-vercel",
   "version": "1.0.0",
-  "description": "iPad Photo Booth Web App (Chopiti Life4Cuts) - Express + Vanilla JS",
-  "main": "server.js",
+  "description": "Life4Cuts Photo Booth (Vercel Serverless + Vercel Blob + Vanilla JS)",
+  "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "vercel dev",
+    "dev": "vercel dev"
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.6.1",
-    "express": "^4.18.2",
-    "nodemailer": "^6.9.13"
+    "@vercel/blob": "^0.24.0",
+    "uuid": "^9.0.1"
   }
 }

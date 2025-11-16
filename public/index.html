@@ -21,19 +21,16 @@
         <button id="capture-btn">촬영</button>
       </div>
 
-      <div id="email-form">
-        <img id="photo-preview" alt="Captured preview" />
-        <div class="form-row">
-          <input id="email-input" type="email" placeholder="이메일 주소를 입력하세요" autocomplete="email" inputmode="email" />
-        </div>
-        <div class="form-row buttons">
-          <button id="send-btn">이메일 보내기</button>
+      <section id="qr-screen" aria-hidden="true" style="display:none;">
+        <div id="qrcode-display"></div>
+        <div class="qr-actions">
           <button id="retry-btn" class="secondary">다시 찍기</button>
         </div>
-      </div>
+      </section>
 
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script src="./script.js"></script>
   </body>
   </html>

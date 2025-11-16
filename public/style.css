@@ -75,6 +75,33 @@ html, body {
   display: none;
 }
 
+/* QR screen */
+#qr-screen {
+  display: none;
+  width: min(92vw, 820px);
+  background: #151821;
+  border-radius: 16px;
+  padding: 20px 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  color: #f4f4f7;
+}
+
+#qrcode-display {
+  width: 260px;
+  height: 260px;
+  margin: 12px auto 16px;
+  background: #fff;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.qr-actions {
+  display: flex;
+  justify-content: center;
+}
+
 /* Controls */
 #controls {
   display: flex;
@@ -119,6 +146,13 @@ button.secondary {
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+#email-status {
+  min-height: 20px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #c8ced8;
 }
 
 #photo-preview {
