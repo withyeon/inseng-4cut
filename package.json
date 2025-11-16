@@ -3,10 +3,7 @@
   "version": "1.0.0",
   "description": "Life4Cuts Photo Booth (Vercel Serverless + Vercel Blob + Vanilla JS)",
   "type": "module",
-  "scripts": {
-    "start": "vercel dev",
-    "dev": "vercel dev"
-  },
+  "scripts": {},
   "dependencies": {
     "@vercel/blob": "^0.24.0",
     "uuid": "^9.0.1"
