@@ -73,6 +73,10 @@ html, body {
 /* Hidden canvas used for capture */
 #photo-canvas {
   display: none;
+  width: min(92vw, 820px);
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
 /* QR screen */
